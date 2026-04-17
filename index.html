@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>幸福+工場・配送安排單</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #faf6f0; --warm: #fff9f2; --gold: #c9a96e; --gold-dark: #9e7a45;
@@ -12,76 +12,84 @@
     --sans: 'Noto Sans TC', sans-serif; --serif: 'Noto Serif TC', serif;
   }
   
-  body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.8; margin: 0; padding-bottom: 160px; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.6; margin: 0; padding-bottom: 180px; -webkit-font-smoothing: antialiased; }
 
-  /* 標頭：手機版縮減間距 */
+  /* 標頭設計 */
   .header { background: var(--ink); padding: 40px 20px; text-align: center; color: #fff8ee; border-bottom: 5px solid var(--gold); }
-  .header-badge { display: inline-block; font-family: var(--serif); font-size: 13px; letter-spacing: 4px; color: var(--gold); border: 1px solid rgba(201,169,110,0.4); padding: 6px 18px; margin-bottom: 15px; }
+  .header-badge { display: inline-block; font-family: var(--serif); font-size: 13px; letter-spacing: 4px; color: var(--gold); border: 1px solid rgba(201,169,110,0.4); padding: 6px 18px; margin-bottom: 12px; }
   .header h1 { font-family: var(--serif); font-size: 26px; margin: 0; letter-spacing: 2px; }
-  .header h1 em { font-style: normal; color: var(--gold); }
+  .header h1 em { font-style: normal; color: var(--gold); margin-left: 8px; }
 
-  .container { max-width: 900px; margin: -20px auto 0; padding: 0 15px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
-  /* 卡片優化 */
-  .card { background: var(--warm); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 25px; box-shadow: 0 6px 20px rgba(44,36,22,0.08); overflow: hidden; }
+  /* 卡片設計 */
+  .card { background: var(--warm); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(44,36,22,0.05); overflow: hidden; }
   .card-head { background: var(--ink); padding: 15px 20px; display: flex; align-items: center; gap: 12px; color: #fff8ee; }
-  .card-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
-  .card-title { font-size: 16px; font-weight: 500; letter-spacing: 1px; margin: 0; }
+  .card-num { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .card-title { font-size: 17px; font-weight: 500; letter-spacing: 1px; margin: 0; }
   .card-body { padding: 20px; }
 
-  /* 響應式欄位 */
-  .field-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
-  @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; gap: 0; } }
-
+  /* 表單欄位 */
   .field { margin-bottom: 20px; }
-  .field label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
   .field input, .field select, .field textarea { 
-    width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; 
-    font-size: 16px; background: #fff; box-sizing: border-box; transition: 0.3s;
-    appearance: none; -webkit-appearance: none; /* 移除 iOS 內建樣式 */
+    width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 6px; 
+    font-size: 16px; background: #fff; transition: 0.3s;
+    appearance: none; -webkit-appearance: none; /* 防止 iOS 預設樣式干擾 */
   }
+  .field input:focus, .field select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px rgba(201,169,110,0.15); }
 
-  /* 表格在手機版的處理 */
-  .prod-table { width: 100%; border-collapse: collapse; }
-  .prod-table th { text-align: left; font-size: 14px; color: var(--ink-mid); padding: 10px; border-bottom: 2px solid var(--border); }
-  .prod-table td { padding: 15px 5px; border-bottom: 1px solid #eee; }
-
-  @media (max-width: 500px) {
-    .prod-table th:nth-child(3), .prod-table td:nth-child(3) { display: none; } /* 手機隱藏進度文字，改用顏色提示 */
-  }
+  /* 手機版專用：品項卡片 (取代容易跑版的表格) */
+  .prod-item { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 15px; position: relative; }
+  .prod-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .prod-item-qty { display: flex; align-items: center; justify-content: space-between; background: var(--cream); padding: 10px; border-radius: 6px; }
+  .prod-input { width: 80px !important; text-align: center; font-weight: 600; color: var(--gold-dark); border: 1px solid var(--gold) !important; }
+  
+  .btn-remove { color: #d4622a; background: none; border: none; font-size: 14px; cursor: pointer; padding: 5px; font-weight: 600; }
 
   /* 配送點 */
-  .del-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-  .del-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
-  .del-title { color: var(--gold-dark); font-weight: 600; font-size: 17px; }
+  .del-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; border-top: 4px solid var(--gold-dark); }
+  .del-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+  .del-title { color: var(--ink); font-weight: 600; font-size: 17px; }
 
-  .qty-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 10px 0; border-bottom: 1px dashed #e5d8c5; }
-  .qty-input { width: 80px !important; text-align: center; font-weight: 600; color: var(--gold-dark); padding: 8px !important; }
+  .qty-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #e5d8c5; }
+  .qty-row:last-child { border-bottom: none; }
 
-  .btn-add { background: #fff; border: 2px dashed var(--gold); color: var(--gold-dark); padding: 15px; width: 100%; cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 10px; }
+  /* 按鈕 */
+  .btn-add { background: #fff; border: 2px dashed var(--gold); color: var(--gold-dark); padding: 16px; width: 100%; cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 16px; transition: 0.2s; }
+  .btn-add:hover { background: var(--warm); }
 
-  /* 底部固定欄優化 */
+  /* 底部固定狀態列 */
   .summary-bar { 
     background: var(--ink); color: var(--gold); padding: 15px; 
     display: flex; justify-content: space-around; align-items: center; 
-    position: sticky; bottom: 85px; z-index: 100; border-top: 2px solid var(--gold);
-    font-size: 15px; font-weight: bold; box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+    position: fixed; bottom: 80px; left: 0; width: 100%; z-index: 100; 
+    font-size: 15px; font-weight: bold; box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
   }
   
   .btn-submit { 
-    width: calc(100% - 30px); margin: 0 15px; padding: 20px; 
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+    width: 100%; padding: 20px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
     color: white; border: none; font-size: 18px; cursor: pointer; font-weight: 600; 
-    letter-spacing: 4px; border-radius: 10px; position: fixed; bottom: 15px; left: 0; z-index: 101;
+    letter-spacing: 4px; position: fixed; bottom: 0; left: 0; z-index: 101;
   }
-  .btn-submit:disabled { background: #666; cursor: not-allowed; box-shadow: none; opacity: 0.7; }
+  .btn-submit:disabled { background: #888; color: #ccc; cursor: not-allowed; }
 
-  /* 狀態圓點 */
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-  .dot-err { background: var(--orange); }
-  .dot-ok { background: #2d8a54; }
+  /* 強制覆蓋全螢幕的遮罩 (解決跑版到底部的問題) */
+  .overlay { 
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; flex-direction: column;
+  }
+  .overlay.show { display: flex !important; }
+  .overlay-box { background: white; color: var(--ink); padding: 40px 30px; border-radius: 12px; text-align: center; width: 85%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .overlay-box h3 { margin-top: 0; color: var(--gold-dark); font-size: 22px; }
 
-  .overlay-box { background: white; color: var(--ink); padding: 30px; border-radius: 15px; text-align: center; width: 80%; }
+  /* 桌面版雙欄配置 */
+  @media (min-width: 768px) {
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .summary-bar { bottom: 90px; width: calc(100% - 40px); left: 20px; border-radius: 12px; }
+    .btn-submit { bottom: 20px; width: calc(100% - 40px); left: 20px; border-radius: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -96,40 +104,55 @@
     <div class="card-head"><span class="card-num">1</span><h2 class="card-title">訂購人基本資料</h2></div>
     <div class="card-body">
       <div class="field-grid">
-        <div class="field"><label>訂購人姓名 *</label><input type="text" id="cust-name" oninput="updateSummary()" placeholder="填寫姓名"></div>
-        <div class="field"><label>聯絡電話 *</label><input type="tel" id="cust-phone" placeholder="聯絡電話"></div>
+        <div class="field"><label>訂購人姓名 *</label><input type="text" id="cust-name" oninput="updateSummary()" placeholder="請輸入姓名"></div>
+        <div class="field"><label>聯絡電話 *</label><input type="tel" id="cust-phone" placeholder="例：0912345678"></div>
       </div>
-      <div class="field"><label>備註說明</label><textarea id="cust-note" rows="2" placeholder="如有特殊需求請註明"></textarea></div>
+      <div class="field"><label>備註說明</label><textarea id="cust-note" rows="2" placeholder="如有其他需求請備註"></textarea></div>
     </div>
   </section>
 
   <section class="card">
-    <div class="card-head"><span class="card-num">2</span><h2 class="card-title">已訂購品項與數量</h2></div>
-    <div class="card-body" style="padding: 15px;">
-      <table class="prod-table">
-        <thead><tr><th>品項名稱</th><th style="width:80px;">總盒數</th><th style="width:100px;">狀態</th><th style="width:30px;"></th></tr></thead>
-        <tbody id="prod-body"></tbody>
-      </table>
+    <div class="card-head"><span class="card-num">2</span><h2 class="card-title">訂購品項與總盒數</h2></div>
+    <div class="card-body" id="prod-container">
+      </div>
+    <div style="padding: 0 20px 20px 20px;">
       <button class="btn-add" onclick="addProd()">＋ 新增禮盒品項</button>
     </div>
   </section>
 
   <section class="card">
     <div class="card-head"><span class="card-num">3</span><h2 class="card-title">配送點安排</h2></div>
-    <div class="card-body" style="padding: 15px;">
-      <div id="delivery-list"></div>
-      <button class="btn-add" onclick="addDel()">＋ 新增配送地址</button>
+    <div class="card-body" id="delivery-container">
+      </div>
+    <div style="padding: 0 20px 20px 20px;">
+      <button class="btn-add" onclick="addDel()">＋ 新增配送點 (地址)</button>
     </div>
   </section>
 
-  <div class="summary-bar" id="summary"></div>
-  <button class="btn-submit" id="btn-submit" onclick="submitForm()" disabled>確認送出表單</button>
 </main>
 
-<div class="overlay" id="ov-loading"><div class="overlay-box"><h3>傳送中...</h3><p>請勿關閉視窗</p></div></div>
-<div class="overlay" id="ov-success"><div class="overlay-box"><h2>✓ 送出成功</h2><p>感謝您的安排。</p><button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:var(--gold); border:none; color:white; border-radius:6px;">返回</button></div></div>
+<div class="summary-bar" id="summary">
+  <span>總計: 0</span> <span>已分: 0</span> <span>待分: 0</span>
+</div>
+<button class="btn-submit" id="btn-submit" onclick="submitForm()" disabled>確認送出配送安排單</button>
+
+<div class="overlay" id="ov-loading">
+  <div class="overlay-box">
+    <h3>傳送中...</h3>
+    <p>正在同步資料，請勿關閉視窗</p>
+  </div>
+</div>
+
+<div class="overlay" id="ov-success">
+  <div class="overlay-box">
+    <h3>✓ 送出成功</h3>
+    <p>感謝您的安排，資料已送出。</p>
+    <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:var(--gold); border:none; color:white; border-radius:6px; font-size:16px; width:100%;">返回重新填寫</button>
+  </div>
+</div>
 
 <script>
+// ★ 請確認這裡是您最新的 GAS 網址
 const GAS_URL = 'https://script.google.com/macros/s/AKfycby6Qj3UxB2dB0FR8mbWidJ8tWD8XrmXIyPuwUM6TFLZnY-Q393PsdTeD4AiOQK_PoDs/exec';
 
 const PRODUCT_LIST = [
@@ -149,7 +172,7 @@ let products = [];
 let deliveries = [];
 
 function addProd() {
-  products.push({ id: Date.now(), name: PRODUCT_LIST[0], customName: '', total: 0 });
+  products.push({ id: Date.now(), name: PRODUCT_LIST[0], customName: '', total: '' });
   render();
 }
 
@@ -159,45 +182,61 @@ function addDel() {
 }
 
 function render() {
-  const pBody = document.getElementById('prod-body');
-  pBody.innerHTML = products.map(p => {
+  // 渲染品項 (手機版卡片式)
+  const pBody = document.getElementById('prod-container');
+  pBody.innerHTML = products.map((p, idx) => {
     const allocated = deliveries.reduce((sum, d) => sum + (d.items[p.id] || 0), 0);
-    const isOk = allocated === p.total && p.total > 0;
+    const pTotal = Number(p.total) || 0;
+    const isOk = (allocated === pTotal && pTotal > 0);
+    
     return `
-      <tr>
-        <td>
-          <select onchange="updateP(${p.id},'name',this.value)" style="font-size:14px; padding:8px;">
-            ${PRODUCT_LIST.map(opt => `<option value="${opt}" ${p.name===opt?'selected':''}>${opt}</option>`).join('')}
-          </select>
-          ${p.name==='自定義' ? `<input type="text" placeholder="品名" oninput="updateP(${p.id},'customName',this.value)" value="${p.customName}" style="margin-top:5px; padding:8px;">` : ''}
-        </td>
-        <td><input type="number" class="qty-input" value="${p.total||''}" oninput="updateP(${p.id},'total',+this.value)"></td>
-        <td><span style="font-size:12px; color:${isOk?'green':'#d4622a'}">${isOk?'✓':'未完'}</span></td>
-        <td><button onclick="removeP(${p.id})" style="border:none;color:#ccc;background:none;font-size:18px;">✕</button></td>
-      </tr>
+      <div class="prod-item">
+        <div class="prod-item-header">
+          <span style="font-weight:bold; color:var(--gold-dark);">品項 ${idx + 1}</span>
+          <button class="btn-remove" onclick="removeP(${p.id})">移除 ✕</button>
+        </div>
+        <select onchange="updateP(${p.id},'name',this.value)" style="width:100%; margin-bottom:10px; padding:12px; font-size:15px; border-radius:6px; border:1px solid #ccc;">
+          ${PRODUCT_LIST.map(opt => `<option value="${opt}" ${p.name===opt?'selected':''}>${opt}</option>`).join('')}
+        </select>
+        ${p.name==='自定義' ? `<input type="text" placeholder="請輸入自定義品名" oninput="updateP(${p.id},'customName',this.value)" value="${p.customName}" style="width:100%; margin-bottom:10px; padding:12px; border:1px solid #ccc; border-radius:6px;">` : ''}
+        <div class="prod-item-qty">
+          <span style="font-size:14px; font-weight:600;">訂購總數</span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:12px; color:${isOk?'#2d8a54':'#d4622a'}; font-weight:bold;">已分配: ${allocated}</span>
+            <input type="number" class="prod-input" value="${p.total}" placeholder="數量" oninput="updateP(${p.id},'total',this.value)">
+          </div>
+        </div>
+      </div>
     `;
   }).join('');
 
-  const dList = document.getElementById('delivery-list');
+  // 渲染配送點
+  const dList = document.getElementById('delivery-container');
   dList.innerHTML = deliveries.map((d, idx) => `
     <div class="del-card">
-      <div class="del-header"><span class="del-title">📍 配送點 ${idx+1}</span><button onclick="removeD(${d.id})" style="color:var(--orange);border:none;background:none;font-size:14px;">移除</button></div>
-      <div class="field"><label>收件姓名 *</label><input type="text" oninput="updateD(${d.id},'name',this.value)" value="${d.name}"></div>
-      <div class="field"><label>完整地址 *</label><input type="text" oninput="updateD(${d.id},'address',this.value)" value="${d.address}"></div>
-      <div class="field"><label>配送日期 *</label><input type="date" oninput="updateD(${d.id},'date',this.value)" value="${d.date}"></div>
-      <div style="background:#fdfaf5; padding:10px; border-radius:6px; margin-top:10px;">
+      <div class="del-header">
+        <span class="del-title">📍 配送點 ${idx+1}</span>
+        <button class="btn-remove" onclick="removeD(${d.id})">移除此點 ✕</button>
+      </div>
+      <div class="field"><label>收件人姓名 *</label><input type="text" oninput="updateD(${d.id},'name',this.value)" value="${d.name}" placeholder="請輸入姓名"></div>
+      <div class="field"><label>希望配送日期 *</label><input type="date" oninput="updateD(${d.id},'date',this.value)" value="${d.date}"></div>
+      <div class="field"><label>完整地址 *</label><input type="text" oninput="updateD(${d.id},'address',this.value)" value="${d.address}" placeholder="請輸入完整收件地址"></div>
+      
+      <div style="background:#fdfaf5; padding:15px; border-radius:6px; margin-top:15px; border: 1px solid #f0e6d2;">
+        <div style="font-size:13px; font-weight:bold; color:var(--ink-mid); margin-bottom:10px;">分配至此地址的盒數：</div>
         ${products.map(p => {
-          const pName = p.name==='自定義' ? (p.customName||'自定義') : p.name;
+          const pName = p.name==='自定義' ? (p.customName||'自定義品項') : p.name;
           return `
             <div class="qty-row">
-              <span style="font-size:14px;">${pName}</span>
-              <input type="number" class="qty-input" oninput="updateDI(${d.id},${p.id},+this.value)" value="${d.items[p.id]||''}">
+              <span style="font-size:15px; line-height:1.4; padding-right:10px;">${pName}</span>
+              <input type="number" class="prod-input" placeholder="0" oninput="updateDI(${d.id},${p.id},this.value)" value="${d.items[p.id]||''}">
             </div>
           `;
         }).join('')}
       </div>
     </div>
   `).join('');
+  
   updateSummary();
 }
 
@@ -205,41 +244,86 @@ function updateP(id,f,v){ products.find(x=>x.id===id)[f]=v; render(); }
 function removeP(id){ products = products.filter(x=>x.id!==id); render(); }
 function updateD(id,f,v){ deliveries.find(x=>x.id===id)[f]=v; updateSummary(); }
 function removeD(id){ deliveries = deliveries.filter(x=>x.id!==id); render(); }
-function updateDI(did, pid, v) { deliveries.find(x=>x.id===did).items[pid] = v; updateSummary(); }
+function updateDI(did, pid, v) { deliveries.find(x=>x.id===did).items[pid] = v === '' ? '' : Number(v); updateSummary(); }
 
 function updateSummary() {
-  const total = products.reduce((s,p)=>s+p.total,0);
+  const total = products.reduce((s,p)=>s + (Number(p.total)||0), 0);
   let allocated = 0;
-  deliveries.forEach(d => Object.values(d.items).forEach(v => allocated += (v||0)));
+  deliveries.forEach(d => Object.values(d.items).forEach(v => allocated += (Number(v)||0)));
   const diff = total - allocated;
-  document.getElementById('summary').innerHTML = `<span>總計: ${total}</span> <span>已分: ${allocated}</span> <span style="color:${diff===0?'#fff':'#f66'}">待分: ${diff}</span>`;
-  const isOk = (total > 0 && diff === 0 && document.getElementById('cust-name').value && deliveries.length > 0 && deliveries.every(d => d.name && d.address && d.date));
-  document.getElementById('btn-submit').disabled = !isOk;
+  
+  const diffColor = diff === 0 && total > 0 ? '#4ade80' : '#f87171';
+  
+  document.getElementById('summary').innerHTML = `
+    <span>訂購總計: ${total}</span> 
+    <span>已分配: ${allocated}</span> 
+    <span style="color:${diffColor};">待分配: ${diff}</span>
+  `;
+
+  // 驗證是否能送出
+  const nameFilled = document.getElementById('cust-name').value.trim() !== '';
+  const hasProducts = products.length > 0 && total > 0;
+  const hasDeliveries = deliveries.length > 0;
+  const delAllFilled = deliveries.every(d => d.name.trim() && d.address.trim() && d.date);
+  
+  const isComplete = nameFilled && hasProducts && hasDeliveries && delAllFilled && (diff === 0);
+  
+  document.getElementById('btn-submit').disabled = !isComplete;
+  document.getElementById('btn-submit').innerText = isComplete ? '確認送出配送安排單' : '請完成所有資料填寫與數量分配';
 }
 
 async function submitForm() {
+  // 防止重複點擊
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
   document.getElementById('ov-loading').classList.add('show');
+
+  // 組裝資料 (確保 customerName 一定存在，解決 GAS 錯誤)
   const payload = {
-    customerName: document.getElementById('cust-name').value,
-    customerPhone: document.getElementById('cust-phone').value,
-    note: document.getElementById('cust-note').value,
-    products: products.map(p => ({ name: p.name==='自定義'?p.customName:p.name, total: p.total })),
+    customerName: document.getElementById('cust-name').value.trim(),
+    customerPhone: document.getElementById('cust-phone').value.trim(),
+    note: document.getElementById('cust-note').value.trim(),
+    products: products.map(p => ({ 
+      name: p.name === '自定義' ? p.customName : p.name, 
+      total: Number(p.total) || 0 
+    })),
     deliveries: deliveries.map(d => ({
-      name: d.name, address: d.address, date: d.date,
-      items: Object.keys(d.items).map(pid => ({ productName: (products.find(p=>p.id==pid)?.name === '自定義' ? products.find(p=>p.id==pid)?.customName : products.find(p=>p.id==pid)?.name), qty: d.items[pid] })).filter(i => i.qty > 0)
+      name: d.name.trim(), 
+      address: d.address.trim(), 
+      date: d.date,
+      items: Object.keys(d.items).map(pid => {
+        const pObj = products.find(p => p.id == pid);
+        return {
+          productName: (pObj?.name === '自定義' ? pObj?.customName : pObj?.name) || '未知品項',
+          qty: Number(d.items[pid]) || 0
+        };
+      }).filter(i => i.qty > 0)
     })),
     submittedAt: new Date().toLocaleString()
   };
+
   try {
-    await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+    // 傳送至 GAS
+    await fetch(GAS_URL, { 
+      method: 'POST', 
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload) 
+    });
+    
+    // 成功畫面
     document.getElementById('ov-loading').classList.remove('show');
     document.getElementById('ov-success').classList.add('show');
   } catch (e) {
-    alert('失敗，請再試一次');
+    alert('網路傳輸發生異常，請檢查連線後再試一次。');
     document.getElementById('ov-loading').classList.remove('show');
+    btn.disabled = false;
   }
 }
+
+// 預設新增一筆品項與配送點
 addProd();
+addDel();
 </script>
 </body>
 </html>
