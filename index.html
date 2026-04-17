@@ -318,23 +318,59 @@ function updateSummary() {
 
 async function submitForm() {
   document.getElementById('ov-loading').style.display = 'flex';
+  
+  // 建立 Payload 並修正 items 的處理方式
   const payload = {
-  customer: document.getElementById('cust-name').value,
-  phone: document.getElementById('cust-phone').value,
-  dateGroups: dateGroups.map(g => ({
-    date: g.date,
-    addresses: g.addresses.map(a => ({
-      receiver: a.receiver,
-      receiverPhone: a.receiverPhone, // <-- 關鍵！務必加入這一行
-      address: a.address,
-      items: a.items.map(i => ({ name: i.name, qty: i.qty }))
+    customer: document.getElementById('cust-name').value,
+    phone: document.getElementById('cust-phone').value,
+    dateGroups: dateGroups.map(g => ({
+      date: g.date,
+      addresses: g.addresses.map(a => {
+        // 將 items 物件轉換為格式化的字串或陣列，以便 GAS 讀取
+        let itemDetails = [];
+        mainProducts.forEach(p => {
+          const qty = a.items[p.id];
+          if (qty && Number(qty) > 0) {
+            const pLabel = p.name === '自定義' ? (p.customName || '自定義品項') : p.name;
+            itemDetails.push({ name: pLabel, qty: qty });
+          }
+        });
+        
+        return {
+          receiver: a.receiver,
+          receiverPhone: a.receiverPhone || "", // 確保收件人電話送出
+          address: a.address,
+          items: itemDetails // 這裡現在是正確的陣列格式了
+        };
+      })
     }))
-  })),
-  mainProducts: mainProducts.map(p => ({
-    name: p.name === '自定義' ? p.customName : p.name,
-    total: p.totalQty
-  }))
-};
+  };
+
+  try {
+    // 發送資料到 GAS
+    await fetch(GAS_URL, { 
+      method: 'POST', 
+      mode: 'no-cors', 
+      body: JSON.stringify(payload) 
+    });
+
+    // 強制等待 1.5 秒後顯示成功畫面 (避免 no-cors 模式下狀態判斷不準)
+    setTimeout(() => {
+      document.getElementById('ov-loading').innerHTML = `
+        <div style="background:#fff; padding:50px; border-radius:30px; text-align:center; color:#2c2416; box-shadow:0 20px 60px rgba(0,0,0,0.5); max-width:85%;">
+          <h1 style="font-family:'Noto Serif TC',serif; color:#a68a55; margin-top:0;">送出成功</h1>
+          <p>安排單已成功送達後台系統，<br>感謝您的細心填寫！</p>
+          <button onclick="location.reload()" style="margin-top:30px; padding:15px 50px; background:#2c2416; color:#fff; border:none; border-radius:50px; cursor:pointer; font-weight:700;">返回</button>
+        </div>
+      `;
+    }, 1500);
+
+  } catch(e) {
+    console.error(e);
+    alert("連線似乎有點問題，請檢查網路或稍後再試。");
+    document.getElementById('ov-loading').style.display = 'none';
+  }
+}
 
   try {
     await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
