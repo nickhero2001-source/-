@@ -229,9 +229,8 @@ function render() {
           <div class="grid-2">
            <div class="input-group"><label>收件人姓名</label><input type="text" value="${a.receiver}" oninput="updateAddrVal(${g.id},${a.id},'receiver',this.value)"></div>
   
-  <div class="input-group"><label>收件人電話</label><input type="tel" value="${a.receiverPhone || ''}" oninput="updateAddrVal(${g.id},${a.id},'receiverPhone',this.value)"></div>
-  
-  <div class="input-group" style="grid-column: span 2;"><label>完整收件地址</label><input type="text" value="${a.address}" oninput="updateAddrVal(${g.id},${a.id},'address',this.value)"></div>
+<div class="input-group"><label>收件人電話</label><input type="tel" value="${a.receiverPhone || ''}" oninput="updateAddrVal(${g.id},${a.id},'receiverPhone',this.value)"> </div>
+<div class="input-group" style="grid-column: span 2;"><label>完整收件地址</label><input type="text" value="${a.address}" oninput="updateAddrVal(${g.id},${a.id},'address',this.value)"></div>
 </div>
           
           <div style="margin-top:10px; border-top:1px solid #f0efeb; padding-top:15px;">
@@ -320,21 +319,22 @@ function updateSummary() {
 async function submitForm() {
   document.getElementById('ov-loading').style.display = 'flex';
   const payload = {
-    customer: document.getElementById('cust-name').value,
-    phone: document.getElementById('cust-phone').value,
-    mainProducts: mainProducts.map(p => ({ name: p.name==='自定義'?p.customName:p.name, total: p.totalQty })),
-    dateGroups: dateGroups.map(g => ({
-      date: g.date,
-      addresses: g.addresses.map(a => ({
-        receiver: a.receiver,
-        address: a.address,
-        items: Object.keys(a.items).map(pid => {
-          const p = mainProducts.find(x => x.id == pid);
-          return { name: p.name==='自定義'?p.customName:p.name, qty: a.items[pid] };
-        }).filter(i => i.qty > 0)
-      }))
+  customer: document.getElementById('cust-name').value,
+  phone: document.getElementById('cust-phone').value,
+  dateGroups: dateGroups.map(g => ({
+    date: g.date,
+    addresses: g.addresses.map(a => ({
+      receiver: a.receiver,
+      receiverPhone: a.receiverPhone, // <-- 關鍵！務必加入這一行
+      address: a.address,
+      items: a.items.map(i => ({ name: i.name, qty: i.qty }))
     }))
-  };
+  })),
+  mainProducts: mainProducts.map(p => ({
+    name: p.name === '自定義' ? p.customName : p.name,
+    total: p.totalQty
+  }))
+};
 
   try {
     await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
