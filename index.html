@@ -84,7 +84,6 @@ function addAddress(gId) {
 }
 
 function render() {
-  // 產品總量區
   const mList = document.getElementById('main-prod-list');
   mList.innerHTML = mainProducts.map(p => `
     <div style="background:#fdfbf8; border:1px solid #eee; padding:10px; border-radius:8px; margin-bottom:10px;">
@@ -99,7 +98,6 @@ function render() {
     </div>
   `).join('');
 
-  // 配送日期區
   const gContainer = document.getElementById('date-group-container');
   gContainer.innerHTML = dateGroups.map(g => `
     <div class="date-group">
@@ -166,6 +164,8 @@ async function submitForm() {
   if(btn.innerText.includes("未對齊")) { if(!confirm("盒數分配尚未對齊，確定要送出嗎？")) return; }
   
   document.getElementById('ov-loading').style.display = 'flex';
+  
+  // 修正點：確保 a.rPhone 被對應到封包中的 phone
   const payload = {
     customer: customerData.name,
     phone: customerData.phone || "未填",
@@ -173,8 +173,18 @@ async function submitForm() {
       date: g.date,
       addresses: g.addresses.map(a => {
         let items = [];
-        mainProducts.forEach(p => { if(a.items[p.id]) items.push({ name: p.name==='自定義'?p.customName:p.name, qty: a.items[p.id] }); });
-        return { receiver: a.receiver, phone: a.rPhone, address: a.address, items: items };
+        mainProducts.forEach(p => { 
+          if(a.items[p.id]) items.push({ 
+            name: p.name==='自定義'?p.customName:p.name, 
+            qty: a.items[p.id] 
+          }); 
+        });
+        return { 
+          receiver: a.receiver, 
+          phone: a.rPhone, // 這裡確保抓取到收件人電話
+          address: a.address, 
+          items: items 
+        };
       })
     }))
   };
